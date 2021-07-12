@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import secrets
-from setup_attacks.setup_rsa import *
+from setup_attacks.rsa.setup_rsa import *
 from setup_attacks.rsa.steps import steps as rsa_steps
 from base64 import b64encode
 
@@ -236,7 +236,7 @@ def about():
 
 def main():
     window = tk.Tk()
-    window.title("Kleptography Demos")
+    window.title("PyKlepTool")
     # width = window.winfo_screenwidth()
     # height = window.winfo_screenheight()
     # window.geometry(f'{width}x{height}')
