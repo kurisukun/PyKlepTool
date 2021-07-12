@@ -2,8 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 import secrets
 from setup_attacks.setup_rsa import *
+from setup_attacks.rsa.steps import steps as rsa_steps
 from base64 import b64encode
-
 
 def random_key():
     key = b64encode(secrets.token_bytes(16)).decode('utf-8')
@@ -22,14 +22,28 @@ def enable_element(elements):
 
 class StepBox(tk.LabelFrame):
 
-    __steps = {}
+    __steps = []
 
     def __init__(self, master, **kwargs):
+        steps = kwargs.pop('steps')
+        self.__steps = steps
         super().__init__(master, **kwargs)
-        info = tk.Text(self, bg='white')
-        info.pack(expand=True, fill=tk.BOTH)
 
 
+        self.info = tk.Text(self, bg='white')
+        self.info.tag_configure("hidden", elide=True)
+        self.info.tag_configure("bold", font=('Verdana', 10, 'bold'))
+        for i, step in reversed(list(enumerate(self.__steps, start=1))):
+            s = f'Step {i}: {step}\n'
+            self.info.insert(1.0, s, (f'{i}', "bold"))
+        self.info.tag_add("hidden", 1.0, tk.END)
+        self.info.pack(expand=True, fill=tk.BOTH)
+
+
+    def display_until_step(self, nb):
+        self.info.tag_remove("hidden", 1.0, tk.END)
+        _ , end_i = self.info.tag_ranges(f'{nb}')
+        self.info.tag_add("hidden", end_i, tk.END)
 
 class RsaDemo:
     """RSA Demo"""
@@ -112,7 +126,7 @@ class RsaDemo:
         bottom_box = tk.Frame(frame_main)
         bottom_box.pack(fill=tk.BOTH, expand=True, side=tk.BOTTOM)
 
-        step_box = StepBox(top_box, text="SETUP attack against key generation in RSA", relief=tk.RIDGE)
+        step_box = StepBox(top_box, text="SETUP attack against key generation in RSA", relief=tk.RIDGE, steps=rsa_steps)
         step_box.pack(fill=tk.BOTH, expand=True, side=tk.RIGHT)
 
 
@@ -127,7 +141,8 @@ class RsaDemo:
                                     command=lambda: [
                                         enable_element([in_attacker_e, in_attacker_d, in_attacker_n,
                                                         lbl_attacker_e, lbl_attacker_d, lbl_attacker_n, bt_user_key]),
-                                        self.__generate_setup_key([in_attacker_e, in_attacker_d, in_attacker_n])])
+                                        self.__generate_setup_key([in_attacker_e, in_attacker_d, in_attacker_n]),
+                                        step_box.display_until_step(1)])
 
         bt_attacker_key.grid(row=0, column=0, columnspan=2, sticky='nesw')
         lbl_attacker_e = tk.Label(l1, text="Attacker's e", state="disabled")
@@ -155,12 +170,13 @@ class RsaDemo:
                                 command=lambda: [
                                     enable_element([in_user_e, in_user_d, in_user_n,
                                                     lbl_user_e, lbl_user_d, lbl_user_n, bt_symmetric_key]),
-                                    self.__generate_setup_key_user([in_user_e, in_user_d, in_user_n])
-                                ])
+                                    self.__generate_setup_key_user([in_user_e, in_user_d, in_user_n]),
+                                    step_box.display_until_step(2)])
+
         bt_user_key.grid(row=0, column=0, columnspan=2, sticky='nesw')
-        lbl_user_e = tk.Label(l2, text="Attacker's e", state="disabled")
-        lbl_user_d = tk.Label(l2, text="Attacker's d", state="disabled")
-        lbl_user_n = tk.Label(l2, text="Attacker's n", state="disabled")
+        lbl_user_e = tk.Label(l2, text="Attacker's E", state="disabled")
+        lbl_user_d = tk.Label(l2, text="Attacker's D", state="disabled")
+        lbl_user_n = tk.Label(l2, text="Attacker's N", state="disabled")
 
         lbl_user_e.grid(row=1, column=0)
         in_user_e = tk.Text(l2, height=5, width=60, state="disabled")
@@ -180,7 +196,8 @@ class RsaDemo:
         bt_symmetric_key = tk.Button(sym_key_box, text="Generate symmetric key", bg="gainsboro", state="disabled",
                                      command=lambda: [enable_element([in_symmetric_key, in_enc_symmetric_key,
                                                                       bt_attacker_key, bt_enc_symmetric_key]),
-                                                      self.__generate_symmetric_key(in_symmetric_key)])
+                                                      self.__generate_symmetric_key(in_symmetric_key),
+                                                      step_box.display_until_step(3)])
         bt_symmetric_key.grid(row=0, column=0)
         in_symmetric_key = tk.Text(sym_key_box, height=5, width=60, state="disabled")
         in_symmetric_key.grid(row=0, column=1, padx=(0, 10))
@@ -188,7 +205,9 @@ class RsaDemo:
         bt_enc_symmetric_key = tk.Button(sym_key_box, text="Encrypt", bg="gainsboro", state="disabled",
                                          command=lambda: [enable_element([in_enc_symmetric_key, in_setup_attack,
                                                                           bt_setup_attack]),
-                                                          self.__generate_enc_symmetric_key(in_enc_symmetric_key)])
+                                                          self.__generate_enc_symmetric_key(in_enc_symmetric_key),
+                                                          step_box.display_until_step(4)])
+
         bt_enc_symmetric_key.grid(row=0, column=2, padx=(10, 0))
         in_enc_symmetric_key = tk.Text(sym_key_box, height=5, width=60, state="disabled")
         in_enc_symmetric_key.grid(row=0, column=3, padx=(0, 10))
@@ -203,7 +222,8 @@ class RsaDemo:
                                             self.__attacker_key[2],
                                             self.__user_key[0],
                                             self.__user_key[2]
-                                        ))])
+                                        )),
+                                        step_box.display_until_step(5)])
 
         bt_setup_attack.grid(row=0, column=4, padx=(10, 0))
         in_setup_attack = tk.Text(sym_key_box, height=5, width=60, state="disabled")
