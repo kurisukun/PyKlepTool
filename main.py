@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk
 import secrets
 from setup_attacks.rsa.setup_rsa import *
 from setup_attacks.rsa.steps import steps as rsa_steps
@@ -100,8 +100,17 @@ class RsaDemo:
         self.window['padx'] = 5
         self.window['pady'] = 5
 
-        frame_main = tk.Frame(self.window)
-        frame_main.pack(fill=tk.BOTH)
+        #frame_main = tk.Frame(self.window)
+        frame_main = ttk.Notebook(self.window)
+        tab1 = tk.Frame(frame_main)
+        tab2 = tk.Frame(frame_main)
+        
+        #frame_main.pack(fill=tk.BOTH)
+
+        frame_main.add(tab1, text ='Normal RSA')
+        frame_main.add(tab2, text ='SETUP RSA')
+        frame_main.pack(expand = 1, fill =tk.BOTH)
+
         """
         frame_canvas = tk.Frame(self.window)
         frame_canvas.grid(row=0, column=0, pady=(5, 0), sticky=tk.NSEW)
@@ -121,9 +130,11 @@ class RsaDemo:
         # Set the canvas scrolling region
         canvas.config(scrollregion=canvas.bbox("all"))
         """
-        top_box = tk.Frame(frame_main)
+
+
+        top_box = tk.Frame(tab2)
         top_box.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
-        bottom_box = tk.Frame(frame_main)
+        bottom_box = tk.Frame(tab2)
         bottom_box.pack(fill=tk.BOTH, expand=True, side=tk.BOTTOM)
 
         step_box = StepBox(top_box, text="SETUP attack against key generation in RSA", relief=tk.RIDGE, steps=rsa_steps)
@@ -237,9 +248,9 @@ def about():
 def main():
     window = tk.Tk()
     window.title("PyKlepTool")
-    # width = window.winfo_screenwidth()
-    # height = window.winfo_screenheight()
-    # window.geometry(f'{width}x{height}')
+    #width = window.winfo_screenwidth()
+    #height = window.winfo_screenheight()
+    #window.geometry(f'{width}x{height}')
 
     menu = tk.Menu(window)
 
