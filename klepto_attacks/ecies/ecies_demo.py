@@ -50,12 +50,10 @@ class EciesDemo:
             (self.__c1, self.__tag1, self.__n1) = DEM_Encrypt(self.__Ki1, plain_mail)
             c = self.__c1
         else:
-            #print(f'ATTACK READY::: {self.__ecies_params1[2]}')
             (self.__Ki2, self.__Ci2, self.__tau2) = ASA_Enc(self.__pk, self.__psk, self.__tau1)
             (self.__c2, self.__tag2, self.__n2) = DEM_Encrypt(self.__Ki2, plain_mail)
             c = self.__c2
-            print(f'CIPHER::: {c}')
-        
+
         mail_content = plain_mail + (f'Encrypted content: {c}\n'
         f'----------------------------------------------------------\n\n').encode('utf-8')
         out_field.insert("1.0", mail_content)
@@ -74,6 +72,12 @@ class EciesDemo:
         c2.delete("1.0", tk.END)
         c2.insert("1.0", self.__c2)
 
+        Ki_comp = ASA_Rec(self.__pk, self.__ssk, self.__Ci2, self.__Ci1)
+        m_broken = asa_decrypt_broken(Ki_comp, self.__c2, self.__tag2, self.__n2)
+        key.delete(0, tk.END)
+        key.insert(0, Ki_comp)
+        m.delete("1.0", tk.END)
+        m.insert("1.0", m_broken)
 
     def __create_tab1(self, tab1, tab2):
         top_box = tk.Frame(tab1)
