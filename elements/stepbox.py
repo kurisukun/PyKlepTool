@@ -10,7 +10,7 @@ class StepBox(tk.LabelFrame):
         super().__init__(master, **kwargs)
 
 
-        self.info = tk.Text(self, bg='white')
+        self.info = tk.Text(self, bg='white', wrap="word")
         #Prevent the user to be able to write in the text areas
         self.info.bind("<Key>", lambda e: "break")
         self.info.tag_configure("hidden", elide=True)

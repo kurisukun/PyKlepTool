@@ -37,6 +37,7 @@ class EciesDemo:
         self.__psk, self.__ssk = ASA_Gen()
         self.__sk, self.__pk  = ecies_key_gen()
 
+
     def __swap_attack_is_ready(self):
         self.__attack_is_ready = True
 
@@ -79,20 +80,25 @@ class EciesDemo:
         m.delete("1.0", tk.END)
         m.insert("1.0", m_broken)
 
-    def __create_tab1(self, tab1, tab2):
-        top_box = tk.Frame(tab1)
-        top_box.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
-        bottom_box = tk.Frame(tab1)
-        bottom_box.pack(fill=tk.BOTH, expand=True, side=tk.BOTTOM)
-        step_box = StepBox(top_box, text="ASA attack against ECIES KEM", relief=tk.RIDGE, steps=asa_ecies_steps1)
-        step_box.pack(fill=tk.BOTH, expand=True, side=tk.RIGHT)
-        chat_box = tk.LabelFrame(bottom_box, text="Send message to Bob")
-        chat_box.pack(expand=True, fill=tk.X)
+    def __create_tab1(self, tab1):
+        left_box = tk.Frame(tab1)
+        left_box.pack(fill=tk.BOTH, expand=True, side=tk.LEFT)
+        right_box = tk.Frame(tab1)
+        right_box.pack(fill=tk.BOTH, expand=True, side=tk.RIGHT)
+        step_box = StepBox(right_box, text="ASA attack against ECIES KEM", relief=tk.RIDGE, steps=asa_ecies_steps1)
+        step_box.pack(fill=tk.BOTH, expand=True)
+        step_box.display_until_step(1)
+        chat_box = tk.LabelFrame(left_box, text="Send message to Bob")
+        chat_box.pack(expand=True, fill=tk.X, side=tk.BOTTOM)
+        chat_box.columnconfigure(0, weight=1)
+        chat_box.rowconfigure(0, weight=1)
         
-        in_mailbox = tk.Text(top_box)
+        mailbox_box = tk.LabelFrame(left_box, text="Bob's mailbox")
+        mailbox_box.pack(fill=tk.BOTH, expand=True, side=tk.TOP)
+        in_mailbox = tk.Text(mailbox_box)
         #Prevent the user to be able to write in the text areas
         in_mailbox.bind("<Key>", lambda e: "break")
-        in_mailbox.pack(fill=tk.BOTH, expand=True, side=tk.LEFT)
+        in_mailbox.pack(fill=tk.BOTH, expand=True)
 
         title_box = tk.Frame(chat_box)
         title_box.grid(row=0, column=0)
@@ -183,7 +189,8 @@ class EciesDemo:
                                             self.__asa_attack(in_attacker_psk, in_attacker_ssk,
                                                     in_bob_psk, 
                                                     in_c1, in_c2, 
-                                                    in_session_key, in_message)
+                                                    in_session_key, in_message),
+                                            step_box.display_until_step(1)
                                         ])
         bt_load_asa_params.grid(row=3, column=0, columnspan=2, sticky='nesw', pady=(20, 20))
 
@@ -191,6 +198,7 @@ class EciesDemo:
         step_box = StepBox(right_box, text="ASA attack against ECIES KEM", relief=tk.RIDGE, steps=asa_ecies_steps2)
         step_box.pack(fill=tk.BOTH, expand=True, side=tk.RIGHT)
         step_box.bind("<Key>", lambda e: "break")
+
 
     def __create_widgets(self):
         # Create some room around all elements of window
@@ -205,5 +213,5 @@ class EciesDemo:
         frame_main.add(tab2, text ='ASA ECIES')
         frame_main.pack(expand = 1, fill =tk.BOTH)
 
-        self.__create_tab1(tab1, tab2)
+        self.__create_tab1(tab1)
         self.__create_tab2(tab2)
