@@ -14,6 +14,24 @@ def rsa_decrypt(c, d, n) :
     m = power_mod(c, d, n)
     return m
 
+
+def key_gen(size):
+    P = _sage_const_0 
+    Q = random_prime(_sage_const_2 **(size / _sage_const_2 ), lbound=_sage_const_2 **(size/_sage_const_2 -_sage_const_1))
+    phi = _sage_const_0
+    N = _sage_const_0
+    E = _sage_const_0
+    while True:
+        P = random_prime(_sage_const_2 ** (size / _sage_const_2),lbound=_sage_const_2 ** (size / _sage_const_2 - _sage_const_1))
+        E = ZZ.random_element(_sage_const_1, _sage_const_2 ** (size / _sage_const_2 - _sage_const_1))
+        N = P * Q
+        phi = (P - _sage_const_1) * (Q - _sage_const_1)
+        if gcd(E, phi) == _sage_const_1 and _sage_const_1 < E and E < phi:
+            break
+    D = inverse_mod(E, phi)
+    return (E, D, N, P, Q)
+
+
 def setup_attacker_key_gen(size):
     P = _sage_const_0 
     Q = random_prime(_sage_const_2 **(size / _sage_const_2 ), lbound=_sage_const_2 **(size/_sage_const_2 -_sage_const_1))
