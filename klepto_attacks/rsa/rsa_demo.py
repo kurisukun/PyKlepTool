@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-from setup_attacks.rsa.steps import steps_tab1 as rsa_steps
-from setup_attacks.rsa.steps import steps_tab2 as setup_rsa_steps
-from setup_attacks.rsa.setup_rsa import *
-from setup_attacks.rsa.utils import random_key, change_value_elements, enable_element, numfy, denumfy
+from klepto_attacks.rsa.steps import steps_tab1 as rsa_steps
+from klepto_attacks.rsa.steps import steps_tab2 as setup_rsa_steps
+from klepto_attacks.rsa.setup_rsa import *
+from klepto_attacks.rsa.utils import random_key, change_value_elements, enable_element, numfy, denumfy
 from elements.stepbox import StepBox
 
 
@@ -297,12 +297,9 @@ class RsaDemo:
         self.window['padx'] = 5
         self.window['pady'] = 5
 
-        #frame_main = tk.Frame(self.window)
         frame_main = ttk.Notebook(self.window)
         tab1 = tk.Frame(frame_main)
         tab2 = tk.Frame(frame_main)
-        
-        #frame_main.pack(fill=tk.BOTH)
 
         frame_main.add(tab1, text ='Normal RSA')
         frame_main.add(tab2, text ='SETUP RSA')

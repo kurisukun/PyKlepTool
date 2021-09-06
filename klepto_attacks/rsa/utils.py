@@ -1,7 +1,7 @@
 import tkinter as tk
 import secrets
 from base64 import b64encode
-from setup_attacks.rsa.setup_rsa import encode_message
+from klepto_attacks.rsa.setup_rsa import encode_message
 
 def enable_element(elements):
     for el in elements:

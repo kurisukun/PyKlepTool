@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from setup_attacks.rsa.setup_rsa import *
 from setup_attacks.rsa.rsa_demo import RsaDemo
+from setup_attacks.ecies.ecies_demo import EciesDemo
 
 def about():
     tk.messagebox.showinfo('About', 'Author: Chris Barros Henriques')
@@ -22,7 +23,7 @@ def main():
 
     menu_item1 = tk.Menu(menu, tearoff=0)
     menu_item1.add_command(label='RSA', command=RsaDemo)
-    menu_item1.add_command(label='ECIES', command=about)
+    menu_item1.add_command(label='ECIES', command=EciesDemo)
     menu.add_cascade(label='Algorithms', menu=menu_item1)
 
     menu_item2 = tk.Menu(menu, tearoff=0)
