@@ -86,7 +86,6 @@ class RsaDemo:
         if size_key == "":
             size_key = 0
         self.__NB_BITS_SETUP_ATTACK = int(size_key)
-        print(f'NEW::: {self.__NB_BITS_SETUP_ATTACK}')
 
     def __create_tab1(self, tab1, tab2):
         top_box = tk.Frame(tab1)
@@ -105,7 +104,7 @@ class RsaDemo:
         l1 = tk.LabelFrame(params_box, text="Size of keys (default: 256 bits))")
         l1.pack(expand=True, side=tk.TOP)
 
-        bt_size_key = tk.Button(l1, text="Size", bg="gainsboro",
+        bt_size_key = tk.Button(l1, text="Set size", bg="gainsboro",
                                 command=lambda: self.__set_nb_bits_size_key(in_size_key.get()))
 
         bt_size_key.grid(row=1, column=0, padx=(10, 0))

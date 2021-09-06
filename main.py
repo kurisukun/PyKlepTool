@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from setup_attacks.rsa.setup_rsa import *
-from setup_attacks.rsa.rsa_demo import RsaDemo
-from setup_attacks.ecies.ecies_demo import EciesDemo
+from klepto_attacks.rsa.setup_rsa import *
+from klepto_attacks.rsa.rsa_demo import RsaDemo
+from klepto_attacks.ecies.ecies_demo import EciesDemo
 
 def about():
     tk.messagebox.showinfo('About', 'Author: Chris Barros Henriques')

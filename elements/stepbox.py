@@ -11,6 +11,8 @@ class StepBox(tk.LabelFrame):
 
 
         self.info = tk.Text(self, bg='white')
+        #Prevent the user to be able to write in the text areas
+        self.info.bind("<Key>", lambda e: "break")
         self.info.tag_configure("hidden", elide=True)
         self.info.tag_configure("bold", font=('Verdana', 10, 'bold'))
         for i, step in reversed(list(enumerate(self.__steps, start=1))):
